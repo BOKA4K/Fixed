@@ -1,0 +1,152 @@
+/* Root Pane */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #3a3a3a, #2e2e2e);
+}
+
+/* TableView Styles */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view:focused,
+.table-view .column-header-background {
+    -fx-background-color: rgba(66, 66, 66, 0.8);
+}
+
+.table-view .column-header-background .label,
+.table-view .table-cell {
+    -fx-text-fill: white;
+}
+
+.table-row-cell {
+    -fx-background-color: #525252;
+    -fx-background-insets: 0 0 1 0;
+    -fx-padding: 0.5em;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #4a4a4a;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #0068c9;
+    -fx-background-radius: 4px;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* ScrollBar Styles */
+.table-view > .virtual-flow > .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.table-view > .virtual-flow > .scroll-bar .increment-button,
+.table-view > .virtual-flow > .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+}
+
+/* Button Styles */
+.button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 50;
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-text-fill: white;
+    -fx-padding: 0.5em 1em;
+}
+
+.button:hover {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* ToggleButton Styles */
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 50;
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-text-fill: white;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
+
+/* CheckBox Styles */
+.check-box .box {
+    -fx-border-color: white;
+    -fx-border-radius: 3px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #007bff;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+/* ComboBox Styles */
+.combo-box {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+}
+
+.combo-box:hover {
+    -fx-border-color: #007bff;
+}
+
+.combo-box .list-cell,
+.combo-box .list-view {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: white;
+    -fx-shape: "M 0 0 L 5 5 L 10 0 Z";
+}
+
+/* TextField and PasswordField */
+.text-field,
+.password-field {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: gray;
+    -fx-border-color: white;
+    -fx-padding: 0.5em;
+    -fx-border-radius: 4px;
+}
+
+.text-field:focused,
+.password-field:focused {
+    -fx-border-color: #007bff;
+}
+
+/* TextArea */
+.text-area {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+    -fx-control-inner-background: #3a3a3a;
+    -fx-border-color: white;
+}
+
+.text-area:focused {
+    -fx-border-color: #007bff;
+}
+
+/* VBox and Pane */
+.vbox,
+.pane {
+    -fx-background-color: transparent;
+}

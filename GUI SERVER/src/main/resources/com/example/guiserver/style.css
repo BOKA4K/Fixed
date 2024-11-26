@@ -1,0 +1,212 @@
+.root {
+    -fx-background-color: #424242;
+}
+
+.table-view,
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #424242;
+    -fx-opacity: 80%;
+}
+
+.table-view .column-header-background .label {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell,
+.table-view .table-column .label {
+    -fx-text-fill: white;
+}
+
+.table-row-cell,
+.table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, #616161;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #005797;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+    -fx-scale-y: 1.01;
+    -fx-scale-x: 1.01;
+}
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background,
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button,
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+}
+
+.button {
+    -fx-border-radius: 90;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+.massage {
+    -fx-border-radius:90;
+}
+
+.button:hover {
+    -fx-border-radius: 90;
+    -fx-background-color: black;
+    -fx-background-radius: 90;
+    -fx-scale-y: 1.1;
+    -fx-scale-x: 1.1;
+}
+
+.toggle-button {
+    -fx-border-radius: 90;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-background-color: transparent;
+    -fx-background-radius: 90;
+}
+
+.toggle-button:selected {
+    -fx-border-color: white;
+    -fx-text-fill: white;
+    -fx-base: transparent;
+    -fx-background: #0000ff;
+    -fx-focus-color: #0000ff;
+    -fx-background-color: #0000ff;
+    -fx-effect: null;
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: grey;
+    -fx-border-radius: 3px;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #28a3f4;
+}
+
+/* ComboBox Styles */
+.combo-box {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: white;
+    -fx-padding: 4px;
+    -fx-shape: "M 0 0 L 5 5 L 10 0 Z";
+}
+
+.combo-box:hover {
+    -fx-border-color: rgb(66, 66, 66);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: rgb(66, 66, 66);
+}
+
+.combo-box .list-view {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.text-field {
+    -fx-background-color: rgb(66, 66, 66);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+    -fx-border-color: white;
+}
+
+.text-field:focused {
+    -fx-border-color: white;
+}
+
+.password-field {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+    -fx-border-color: white;
+}
+
+.password-field:focused {
+    -fx-border-color: white;
+}
+
+.password-field .text {
+    -fx-text-fill: white;
+}
+
+.password-field .prompt-text {
+    -fx-text-fill: white;
+}
+
+.text-area {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+    -fx-control-inner-background: #424242;
+    -fx-border-color: white;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: #424242;
+}
+
+.text-area .content {
+    -fx-background-color: #424242;
+}
+
+.text-area:focused {
+    -fx-border-color: white;
+}
+
+.text-area .text {
+    -fx-text-fill: white;
+}
+
+.text-area .prompt-text {
+    -fx-text-fill: white;
+}
+
+.vbox {
+    -fx-background-color: transparent; /* Add this line to set the VBox background color to transparent */
+}
+.pane {
+    -fx-background-color: #424242;
+}
