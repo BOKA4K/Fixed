@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
+
 public class LoginController {
     private final ServerConnection serverConnection;
 
@@ -29,21 +31,18 @@ public class LoginController {
     }
     @FXML
     void SgnUp_Page(ActionEvent event) throws IOException {
-        // Create the FXMLLoader and load the SignUp.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
-
-        // Create an instance of the SignUpController with the ServerConnection
-
-        // Set the controller for the loader
-        loader.setControllerFactory(param -> new LoginController(serverConnection));
-
-        // Load the root from the FXML file
+        loader.setControllerFactory(param -> new SignupController(serverConnection));
         Parent root = loader.load();
-
-        // Get the current stage from the event source
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Set the scene to the signup page
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+    void go_to_Dashboard(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+        loader.setControllerFactory(param -> new DashboardController(serverConnection));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -57,6 +56,9 @@ public class LoginController {
         String result = serverConnection.receiveMessage();
         if ("Login successful".equals(result)) {
             System.out.println("Login done");
+            go_to_Dashboard(event);
+
+
         } else if (name.isEmpty() && pass.isEmpty()) {
             error.setText("Please fill the fields correctly");
         } else {

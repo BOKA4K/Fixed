@@ -20,6 +20,7 @@ public class ServerConnection {
     }
 
     public void sendMessage(String message) {
+        writer.flush();
         writer.println(message);
     }
 

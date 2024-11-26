@@ -3,11 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" spacing="50.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.DashboardController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" spacing="50.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.Service_RequestController">
    <children>
-      <Button mnemonicParsing="false" text="Service Booking" />
-      <Button mnemonicParsing="false" text="Service Request Overview" />
-      <Button mnemonicParsing="false" text="Payment and Billing" />
-      <Button mnemonicParsing="false" text="Go Back" />
+      <Button mnemonicParsing="false" onAction="#go_to_AI_Assisted" text="AI-Assisted Booking" />
+      <Button mnemonicParsing="false" onAction="#go_to_manual_booking" text="Manual Booking" />
+      <Button mnemonicParsing="false" onAction="#go_to_DashBoard" text="Go Back" />
    </children>
 </VBox>

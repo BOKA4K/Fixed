@@ -5,9 +5,9 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" spacing="50.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.DashboardController">
    <children>
-      <Button mnemonicParsing="false" text="Service Booking" />
-      <Button mnemonicParsing="false" text="Service Request Overview" />
-      <Button mnemonicParsing="false" text="Payment and Billing" />
-      <Button mnemonicParsing="false" text="Go Back" />
+      <Button mnemonicParsing="false" onAction="#Go_to_Service_Booking" text="Service Booking" />
+      <Button mnemonicParsing="false" onAction="#Go_to_Service_Overview" text="Service Request Overview" />
+      <Button mnemonicParsing="false" onAction="#Go_to_Payment" text="Payment and Billing" />
+      <Button mnemonicParsing="false" onAction="#Logout" text="Go Back" />
    </children>
 </VBox>
