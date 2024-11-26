@@ -26,7 +26,7 @@ public class UserService {
         }
         return false;
     }
-    public boolean bookAppointment(String username, String password, String technicianEmail, String appointmentDate) {
+    public boolean bookAppointment(String username, String password, String technicianEmail, String appointmentDate,String problem_description) {
         try {
             // Step 1: Check if the user's credentials are valid
             String query = "SELECT user_id FROM users WHERE name = ? AND password = ?";
@@ -64,11 +64,14 @@ public class UserService {
             technicianStatement.close();
 
             // Step 3: Create a service request for the customer
-            String serviceRequestQuery = "INSERT INTO service_requests (user_id, technician_id, status, requested_at, appointment_time) VALUES (?, ?, 'pending', CURRENT_TIMESTAMP, ?)";
+            String serviceRequestQuery = "INSERT INTO service_requests (user_id, technician_id,  problem_description, status, requested_at, appointment_time) VALUES (?, ?, ? , 'pending', CURRENT_TIMESTAMP, ?)";
             PreparedStatement serviceRequestStatement = Server.conn.prepareStatement(serviceRequestQuery);
             serviceRequestStatement.setInt(1, userId);
             serviceRequestStatement.setInt(2, technicianId);
-            serviceRequestStatement.setString(3, appointmentDate);
+            serviceRequestStatement.setString(3, problem_description);
+            serviceRequestStatement.setString(4, appointmentDate);
+
+
             serviceRequestStatement.executeUpdate();
 
             // Step 4: Schedule an appointment for the service request

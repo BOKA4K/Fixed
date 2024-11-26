@@ -9,10 +9,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="600.0" spacing="50.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.TechnicianBookingController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="600.0" spacing="20.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.TechnicianBookingController">
    <children>
       <TextField fx:id="Search" promptText="Search" />
-      <TableView fx:id="technicians" prefHeight="204.0" prefWidth="600.0">
+      <Label fx:id="error" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="287.0" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="technicians" prefHeight="298.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="name" prefWidth="75.0" text="Name" />
             <TableColumn fx:id="email" prefWidth="75.0" text="Email" />
@@ -21,11 +26,7 @@
             <TableColumn fx:id="hourly_rate" prefWidth="75.0" text="Hourly Fee" />
         </columns>
       </TableView>
-      <Label fx:id="error" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="287.0" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
+      <TextField fx:id="problem_description" prefHeight="32.0" prefWidth="0.0" promptText="Problem Description" />
       <DatePicker fx:id="date" />
       <Button mnemonicParsing="false" onAction="#Book_Appointment" text="Book Appointment" />
       <Button mnemonicParsing="false" onAction="#go_to_Service_Request" text="Go Back" />

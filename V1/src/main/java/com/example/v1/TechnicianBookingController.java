@@ -57,6 +57,8 @@ public class TechnicianBookingController implements Initializable {
     public TechnicianBookingController(ServerConnection serverConnection) {
         this.serverConnection = serverConnection;
     }
+    @FXML
+    private TextField problem_description;
 
     @FXML
     void Book_Appointment(ActionEvent event) throws IOException {
@@ -70,7 +72,7 @@ public class TechnicianBookingController implements Initializable {
             serverConnection.sendMessage("BookAppointment");
             serverConnection.sendMessage(email);
             serverConnection.sendMessage(date_);
-
+            serverConnection.sendMessage(problem_description.getText());
             if (serverConnection.receiveMessage().equals("booking done")) {
                 error.setText("Booking done");
             } else {

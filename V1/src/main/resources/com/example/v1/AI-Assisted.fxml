@@ -12,7 +12,6 @@
          <font>
             <Font size="17.0" />
          </font></Label>
-      <Label fx:id="recommend_technician" text="Label" />
       <TextField fx:id="proplem_description" promptText="problem Description" />
       <Button mnemonicParsing="false" onAction="#Get_Recommendation" text="Get Recommendation" />
       <Button mnemonicParsing="false" onAction="#go_to_Service_Request" text="Go Back" />

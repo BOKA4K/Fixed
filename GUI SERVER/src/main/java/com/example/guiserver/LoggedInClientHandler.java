@@ -64,9 +64,9 @@ public class LoggedInClientHandler extends Thread {
     private void Book_Appointment() throws IOException {
         String email = reader.readLine();
         String date = reader.readLine();
-
+        String problem_description = reader.readLine();
         if (email != null && !email.isEmpty() && date != null && !date.isEmpty()) {
-            boolean booking_status=userService.bookAppointment(name, password, email, date);
+            boolean booking_status=userService.bookAppointment(name, password, email, date,problem_description);
             if (booking_status){
                 writer.println("booking done");
             }

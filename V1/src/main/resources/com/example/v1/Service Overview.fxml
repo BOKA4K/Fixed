@@ -15,7 +15,7 @@
          </children>
       </VBox>
       <HBox prefHeight="400.0" prefWidth="54.0" stylesheets="@style.css" />
-      <TableView prefHeight="400.0" prefWidth="1006.0">
+      <TableView fx:id="appointmentTable" prefHeight="400.0" prefWidth="1006.0">
         <columns>
           <TableColumn fx:id="Appointment" prefWidth="97.60003817081451" text="Appointment" />
             <TableColumn fx:id="Appointment_Description" prefWidth="197.5999755859375" text="Appointment Description" />

@@ -1,4 +1,7 @@
 package com.example.v1;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,26 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
-import javafx.stage.Stage;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,10 +29,7 @@ public class Service_overviewController implements Initializable {
     }
 
     @FXML
-    private TableView<AppointmentDetails> appointmentTable;
-
-    @FXML
-    private TableColumn<AppointmentDetails, String> Appointment;
+    private TableColumn<AppointmentDetails, Integer> Appointment;
 
     @FXML
     private TableColumn<AppointmentDetails, String> Appointment_Description;
@@ -58,6 +39,9 @@ public class Service_overviewController implements Initializable {
 
     @FXML
     private TableColumn<AppointmentDetails, String> scheduledTime;
+
+    @FXML
+    private TableView<AppointmentDetails> appointmentTable;
 
     public List<AppointmentDetails> jsonToAppointmentsList(JSONArray appointmentsJsonArray) {
         List<AppointmentDetails> appointmentsList = new ArrayList<>();
@@ -82,7 +66,7 @@ public class Service_overviewController implements Initializable {
 
     @FXML
     void Cancel_appointment(ActionEvent event) {
-        // Implementation to cancel appointment
+        // Handle the cancel appointment functionality
     }
 
     @FXML
@@ -97,33 +81,29 @@ public class Service_overviewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Send request for service overview data
         serverConnection.sendMessage("Service_overview");
-
         try {
-            // Receive response as a JSON string
+            // Receive the response containing appointment data
             String response = serverConnection.receiveMessage();
 
             // Convert the response string to a JSONArray
             JSONArray appointmentsJsonArray = new JSONArray(response);
 
-            // Convert JSONArray to List<AppointmentDetails>
+            // Convert the JSONArray to a list of AppointmentDetails
             List<AppointmentDetails> appointmentsList = jsonToAppointmentsList(appointmentsJsonArray);
 
-            // Create an ObservableList to be used by the TableView
+            // Bind the list to the TableView
             ObservableList<AppointmentDetails> appointmentsObservableList = FXCollections.observableArrayList(appointmentsList);
-
-            // Set up the TableView with the data
             appointmentTable.setItems(appointmentsObservableList);
 
-            // Bind the TableView columns to the AppointmentDetails properties
-
+            // Set up the columns to display the data
+            Appointment.setCellValueFactory(cellData -> cellData.getValue().appointmentIdProperty().asObject());
             Appointment_Description.setCellValueFactory(cellData -> cellData.getValue().problemDescriptionProperty());
             Appointment_Status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
             scheduledTime.setCellValueFactory(cellData -> cellData.getValue().scheduledTimeProperty());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
