@@ -11,7 +11,7 @@
       <TextField fx:id="UserName" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="200.0" promptText="User Name" />
       <PasswordField fx:id="Password" alignment="CENTER" maxWidth="-Infinity" prefWidth="200.0" promptText="Password" />
       <Label fx:id="error" alignment="CENTER" prefHeight="17.0" prefWidth="280.0" textFill="RED" />
-      <Button mnemonicParsing="false"  text="Sign Up" />
-      <Button mnemonicParsing="false"  text="Go Back" />
+      <Button mnemonicParsing="false" onAction="#SignUp" text="Sign Up" />
+      <Button mnemonicParsing="false" onAction="#LoginPage" text="Login Page" />
    </children>
 </VBox>
