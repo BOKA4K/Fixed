@@ -11,32 +11,35 @@ import java.util.List;
 
 public class LoggedInClientHandler extends Thread {
     private String name;
+    private String password;
+
+
     private Socket clientSocket;
     private BufferedReader reader;
     private PrintWriter writer;
     private UserService userService;
     private   AI_assisted aiAssisted;
-    public LoggedInClientHandler(Socket socket, String name, BufferedReader reader, PrintWriter writer, UserService userService) {
+    public LoggedInClientHandler(Socket socket, String name,String password, BufferedReader reader, PrintWriter writer, UserService userService) {
         this.clientSocket = socket;
         this.name = name;
+        this.password=password;
         this.reader = reader;
         this.writer = writer;
         this.userService = userService;
         aiAssisted=new AI_assisted();
     }
-    public void get_Ai_Recommendation() throws Exception {
+    private void get_Ai_Recommendation() throws Exception {
 
         String problemDescription=reader.readLine();
         if (problemDescription!=null||problemDescription.isEmpty()){
             System.out.println(problemDescription);
-
             String response=aiAssisted.getRecommendedTechnician(problemDescription,userService.getTechniciansSkills());
             writer.println(response);
             System.out.println(response);
         }
 
     }
-    public static String convertTechniciansToJson(List<TechnicianDetails> technicians) {
+    private static String convertTechniciansToJson(List<TechnicianDetails> technicians) {
         JSONArray jsonArray = new JSONArray();
 
         for (TechnicianDetails technician : technicians) {
@@ -52,12 +55,48 @@ public class LoggedInClientHandler extends Thread {
         return jsonArray.toString();
     }
     public void TechnicianDetails() {
+        System.out.println(userService.getTechniciansDetails());
         String xx=convertTechniciansToJson( userService.getTechniciansDetails());
+        System.out.println(xx);
         writer.println(xx);
+
+    }
+    private void Book_Appointment() throws IOException {
+        String email = reader.readLine();
+        String date = reader.readLine();
+
+        if (email != null && !email.isEmpty() && date != null && !date.isEmpty()) {
+            boolean booking_status=userService.bookAppointment(name, password, email, date);
+            if (booking_status){
+                writer.println("booking done");
+            }
+        } else {
+            System.out.println("Email or date cannot be null or empty.");
+        }
 
 
     }
-    public void run() {
+    public JSONArray getAppointmentsAsJson(String name, String password) {
+        List<AppointmentDetails> appointments = userService.getAppointmentsByCredentials(name, password);
+        JSONArray appointmentsJsonArray = new JSONArray();
+
+        for (AppointmentDetails appointment : appointments) {
+            JSONObject appointmentJson = new JSONObject();
+            appointmentJson.put("appointment_id", appointment.getAppointmentId());
+            appointmentJson.put("scheduled_time", appointment.getScheduledTime());
+            appointmentJson.put("status", appointment.getStatus());
+            appointmentJson.put("problem_description", appointment.getProblemDescription());
+
+            // Add the individual appointment JSON object to the array
+            appointmentsJsonArray.put(appointmentJson);
+        }
+
+        return appointmentsJsonArray;  // Return the JSON array
+    }
+        private void Service_overview(){
+            writer.println(getAppointmentsAsJson(name,password));
+        }
+        public void run() {
         try {
             String message;
             while ((message = reader.readLine()) != null) {
@@ -65,6 +104,9 @@ public class LoggedInClientHandler extends Thread {
                 switch (message) {
                     case "Ai-assisted" -> get_Ai_Recommendation();
                     case "TechnicianDetails" -> TechnicianDetails();
+                    case "BookAppointment" -> Book_Appointment();
+
+                    case "Service_overview" -> Service_overview();
 
                     default -> System.out.println("Server: Invalid command");
                 }            }

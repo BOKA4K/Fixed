@@ -26,6 +26,83 @@ public class UserService {
         }
         return false;
     }
+    public boolean bookAppointment(String username, String password, String technicianEmail, String appointmentDate) {
+        try {
+            // Step 1: Check if the user's credentials are valid
+            String query = "SELECT user_id FROM users WHERE name = ? AND password = ?";
+            PreparedStatement statement = Server.conn.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                System.out.println("Invalid credentials");
+                resultSet.close();
+                statement.close();
+                return false; // User doesn't exist or password is incorrect
+            }
+
+            int userId = resultSet.getInt("user_id");
+            resultSet.close();
+            statement.close();
+
+            // Step 2: Check if the technician exists
+            String technicianQuery = "SELECT user_id FROM users WHERE email = ? AND role = 'technician'";
+            PreparedStatement technicianStatement = Server.conn.prepareStatement(technicianQuery);
+            technicianStatement.setString(1, technicianEmail);
+            ResultSet technicianResultSet = technicianStatement.executeQuery();
+
+            if (!technicianResultSet.next()) {
+                System.out.println("Technician not found");
+                technicianResultSet.close();
+                technicianStatement.close();
+                return false; // Technician not found
+            }
+
+            int technicianId = technicianResultSet.getInt("user_id");
+            technicianResultSet.close();
+            technicianStatement.close();
+
+            // Step 3: Create a service request for the customer
+            String serviceRequestQuery = "INSERT INTO service_requests (user_id, technician_id, status, requested_at, appointment_time) VALUES (?, ?, 'pending', CURRENT_TIMESTAMP, ?)";
+            PreparedStatement serviceRequestStatement = Server.conn.prepareStatement(serviceRequestQuery);
+            serviceRequestStatement.setInt(1, userId);
+            serviceRequestStatement.setInt(2, technicianId);
+            serviceRequestStatement.setString(3, appointmentDate);
+            serviceRequestStatement.executeUpdate();
+
+            // Step 4: Schedule an appointment for the service request
+            String appointmentQuery = "SELECT request_id FROM service_requests WHERE user_id = ? AND technician_id = ? AND appointment_time = ?";
+            PreparedStatement appointmentStatement = Server.conn.prepareStatement(appointmentQuery);
+            appointmentStatement.setInt(1, userId);
+            appointmentStatement.setInt(2, technicianId);
+            appointmentStatement.setString(3, appointmentDate);
+            ResultSet appointmentResultSet = appointmentStatement.executeQuery();
+
+            if (appointmentResultSet.next()) {
+                int serviceRequestId = appointmentResultSet.getInt("request_id");
+
+                String scheduleAppointmentQuery = "INSERT INTO appointments (service_request_id, technician_id, scheduled_time, status) VALUES (?, ?, ?, 'scheduled')";
+                PreparedStatement scheduleAppointmentStatement = Server.conn.prepareStatement(scheduleAppointmentQuery);
+                scheduleAppointmentStatement.setInt(1, serviceRequestId);
+                scheduleAppointmentStatement.setInt(2, technicianId);
+                scheduleAppointmentStatement.setString(3, appointmentDate);
+                scheduleAppointmentStatement.executeUpdate();
+
+                appointmentResultSet.close();
+                scheduleAppointmentStatement.close();
+                return true; // Appointment successfully booked
+            }
+
+            appointmentResultSet.close();
+            appointmentStatement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Failed to book appointment
+    }
+
     public List<TechnicianDetails> getTechniciansDetails() {
         List<TechnicianDetails> technicianDetailsList = new ArrayList<>();
         String query = "SELECT name, email, skills, hourlyrate, status FROM users WHERE role = 'technician'";
@@ -101,5 +178,56 @@ public class UserService {
         }
 
         return techniciansSkills;
+    }
+    public List<AppointmentDetails> getAppointmentsByCredentials(String username, String password) {
+        List<AppointmentDetails> appointments = new ArrayList<>();
+
+        try {
+            // Step 1: Validate user credentials
+            String query = "SELECT user_id FROM users WHERE name = ? AND password = ?";
+            PreparedStatement statement = Server.conn.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                System.out.println("Invalid credentials");
+                resultSet.close();
+                statement.close();
+                return appointments;  // Empty list if user is invalid
+            }
+
+            int userId = resultSet.getInt("user_id");
+            resultSet.close();
+            statement.close();
+
+            // Step 2: Fetch appointments for this user
+            String appointmentQuery = "SELECT a.appointment_id, a.scheduled_time, a.status, s.problem_description " +
+                    "FROM appointments a " +
+                    "JOIN service_requests s ON a.service_request_id = s.request_id " +
+                    "WHERE s.user_id = ?";
+            PreparedStatement appointmentStatement = Server.conn.prepareStatement(appointmentQuery);
+            appointmentStatement.setInt(1, userId);
+            ResultSet appointmentResultSet = appointmentStatement.executeQuery();
+
+            // Step 3: Process the results and populate the appointments list
+            while (appointmentResultSet.next()) {
+                int appointmentId = appointmentResultSet.getInt("appointment_id");
+                String scheduledTime = appointmentResultSet.getString("scheduled_time");
+                String status = appointmentResultSet.getString("status");
+                String problemDescription = appointmentResultSet.getString("problem_description");
+
+                AppointmentDetails appointment = new AppointmentDetails(appointmentId, scheduledTime, status, problemDescription);
+                appointments.add(appointment);
+            }
+
+            appointmentResultSet.close();
+            appointmentStatement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return appointments;  // Returns the list of appointments
     }
 }

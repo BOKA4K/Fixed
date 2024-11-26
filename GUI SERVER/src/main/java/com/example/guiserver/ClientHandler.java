@@ -31,7 +31,7 @@ public class ClientHandler extends Thread {
             // Transition to LoggedInClientHandler without closing the socket
             System.out.println(name+"loged in ");
 
-            transitionToLoggedInClientHandler(name);
+            transitionToLoggedInClientHandler(name,password);
         } else {
             writer.println("Server: Invalid credentials");
         }
@@ -85,10 +85,10 @@ public class ClientHandler extends Thread {
         }
     }
 
-    private void transitionToLoggedInClientHandler(String name) {
+    private void transitionToLoggedInClientHandler(String name,String password) {
         try {
             // Instead of closing the socket, pass it to the LoggedInClientHandler
-            LoggedInClientHandler loggedInClientHandler = new LoggedInClientHandler(clientSocket, name, reader, writer, userService);
+            LoggedInClientHandler loggedInClientHandler = new LoggedInClientHandler(clientSocket, name,password, reader, writer, userService);
             running = false;
 
             loggedInClientHandler.start(); // Start the LoggedInClientHandler thread

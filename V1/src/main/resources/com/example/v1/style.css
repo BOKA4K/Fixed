@@ -4,35 +4,19 @@
 }
 
 /* TableView Styles */
-.table-view {
-    -fx-background-color: transparent;
-}
 
-.table-view:focused,
-.table-view .column-header-background {
-    -fx-background-color: rgba(66, 66, 66, 0.8);
-}
-
-.table-view .column-header-background .label,
-.table-view .table-cell {
-    -fx-text-fill: white;
-}
-
-.table-row-cell {
-    -fx-background-color: #525252;
-    -fx-background-insets: 0 0 1 0;
-    -fx-padding: 0.5em;
-}
-
-.table-row-cell:odd {
-    -fx-background-color: #4a4a4a;
-}
 
 .table-row-cell:selected {
     -fx-background-color: #0068c9;
     -fx-background-radius: 4px;
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
+}
+
+/* Ensuring Proper Text Alignment in Table Cells */
+.table-cell {
+    -fx-alignment: center-left; /* Align text to the left, change to center if needed */
+    -fx-padding: 0.5em;
 }
 
 /* ScrollBar Styles */

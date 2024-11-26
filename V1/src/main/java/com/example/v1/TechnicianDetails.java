@@ -1,49 +1,60 @@
 package com.example.v1;
 
+import javafx.beans.property.SimpleStringProperty;
+
 class TechnicianDetails {
-    private String name;
-    private String email;
-    private String skills;
-    private String hourlyRate;
-    private String status;
+    private SimpleStringProperty name;
+    private SimpleStringProperty email;
+    private SimpleStringProperty skills;
+    private SimpleStringProperty hourlyRate;
+    private SimpleStringProperty status;
 
     public TechnicianDetails(String name, String email, String skills, String hourlyRate, String status) {
-        this.name = name;
-        this.email = email;
-        this.skills = skills;
-        this.hourlyRate = hourlyRate;
-        this.status = status;
+        this.name = new SimpleStringProperty(name);
+        this.email = new SimpleStringProperty(email);
+        this.skills = new SimpleStringProperty(skills);
+        this.hourlyRate = new SimpleStringProperty(hourlyRate);
+        this.status = new SimpleStringProperty(status);
     }
 
-    // Getters and toString method
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public String getEmail() {
-        return email;
+        return email.get();
     }
 
     public String getSkills() {
-        return skills;
+        return skills.get();
     }
 
     public String getHourlyRate() {
-        return hourlyRate;
+        return hourlyRate.get();
     }
 
     public String getStatus() {
-        return status;
+        return status.get();
     }
 
-    @Override
-    public String toString() {
-        return "TechnicianDetails{" +
-                "name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", skills='" + skills + '\'' +
-                ", hourlyRate='" + hourlyRate + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+    // Optionally, expose SimpleStringProperty for direct binding
+    public SimpleStringProperty nameProperty() {
+        return name;
+    }
+
+    public SimpleStringProperty emailProperty() {
+        return email;
+    }
+
+    public SimpleStringProperty skillsProperty() {
+        return skills;
+    }
+
+    public SimpleStringProperty hourlyRateProperty() {
+        return hourlyRate;
+    }
+
+    public SimpleStringProperty statusProperty() {
+        return status;
     }
 }
