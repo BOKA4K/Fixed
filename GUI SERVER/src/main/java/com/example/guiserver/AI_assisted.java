@@ -28,7 +28,7 @@ public class AI_assisted {
     private String createPromptMessage(String problemDescription, HashMap<String, String> techniciansData) {
         StringBuilder techniciansString = new StringBuilder("Technicians:\n");
         for (Map.Entry<String, String> entry : techniciansData.entrySet()) {
-            techniciansString.append(" email("+entry.getKey()).append(")  skills(").append(entry.getValue()).append(") \n ----- ");
+            techniciansString.append(" email("+entry.getKey()).append(")  skills(").append(entry.getValue()).append("). \n ----- ");
         }
 
         return problemDescription + "\n\n" + techniciansString.toString() + "\n\n" +
@@ -40,7 +40,7 @@ public class AI_assisted {
         String escapedPrompt = promptMessage.replace("\"", "\\\"").replace("\n", "\\n");
         System.out.println(escapedPrompt);
         return "{\n" +
-                "  \"model\": \"llama3.2:1b\",\n" +
+                "  \"model\": \"llama3.1\",\n" +
                 "  \"messages\": [\n" +
                 "    {\"role\": \"user\", \"content\": \"" + escapedPrompt + "\"}\n" +
                 "  ]\n" +
@@ -116,7 +116,4 @@ public class AI_assisted {
                 .getJSONObject("message")
                 .getString("content");
     }
-
-
-
 }

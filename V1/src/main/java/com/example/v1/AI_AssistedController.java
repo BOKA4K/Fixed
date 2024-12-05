@@ -32,7 +32,7 @@ public class AI_AssistedController {
         serverConnection.sendMessage("Ai-assisted");
 
         serverConnection.sendMessage(proplem_description.getText());
-       String response=serverConnection.receiveMessage();
+        String response=serverConnection.receiveMessage();
         ai_respons.setText(response);
     }
 

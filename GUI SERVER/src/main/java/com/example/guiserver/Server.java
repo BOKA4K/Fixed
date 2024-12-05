@@ -11,7 +11,7 @@ public class Server {
         String port = "3306";
         String database = "fixed2";
         String user = "root";
-        String password = "12345678";
+        String password = "12354678";
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?user=" + user + "&password=" + password;
         try {
             conn = DriverManager.getConnection(url);

@@ -12,7 +12,7 @@ import java.util.List;
 public class LoggedInClientHandler extends Thread {
     private String name;
     private String password;
-
+    private JsonConverter jsonConverter;
 
     private Socket clientSocket;
     private BufferedReader reader;
@@ -39,24 +39,9 @@ public class LoggedInClientHandler extends Thread {
         }
 
     }
-    private static String convertTechniciansToJson(List<TechnicianDetails> technicians) {
-        JSONArray jsonArray = new JSONArray();
-
-        for (TechnicianDetails technician : technicians) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name", technician.getName());
-            jsonObject.put("email", technician.getEmail());
-            jsonObject.put("skills", technician.getSkills());
-            jsonObject.put("hourlyRate", technician.getHourlyRate());
-            jsonObject.put("status", technician.getStatus());
-            jsonArray.put(jsonObject);
-        }
-
-        return jsonArray.toString();
-    }
     public void TechnicianDetails() {
         System.out.println(userService.getTechniciansDetails());
-        String xx=convertTechniciansToJson( userService.getTechniciansDetails());
+        String xx=jsonConverter.convertTechniciansToJson( userService.getTechniciansDetails());
         System.out.println(xx);
         writer.println(xx);
 
@@ -76,28 +61,12 @@ public class LoggedInClientHandler extends Thread {
 
 
     }
-    public JSONArray getAppointmentsAsJson(String name, String password) {
-        List<AppointmentDetails> appointments = userService.getAppointmentsByCredentials(name, password);
-        JSONArray appointmentsJsonArray = new JSONArray();
-
-        for (AppointmentDetails appointment : appointments) {
-            JSONObject appointmentJson = new JSONObject();
-            appointmentJson.put("appointment_id", appointment.getAppointmentId());
-            appointmentJson.put("scheduled_time", appointment.getScheduledTime());
-            appointmentJson.put("status", appointment.getStatus());
-            appointmentJson.put("problem_description", appointment.getProblemDescription());
-
-            // Add the individual appointment JSON object to the array
-            appointmentsJsonArray.put(appointmentJson);
-        }
-
-        return appointmentsJsonArray;  // Return the JSON array
-    }
         private void Service_overview(){
-            writer.println(getAppointmentsAsJson(name,password));
+            writer.println(jsonConverter.getAppointmentsAsJson(name,password));
         }
         public void run() {
         try {
+            jsonConverter=new JsonConverter(userService);
             String message;
             while ((message = reader.readLine()) != null) {
                 System.out.println("Message from " + name + ": " + message);

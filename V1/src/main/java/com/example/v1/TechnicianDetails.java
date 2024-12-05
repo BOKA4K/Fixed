@@ -2,7 +2,8 @@ package com.example.v1;
 
 import javafx.beans.property.SimpleStringProperty;
 
-class TechnicianDetails {
+class
+TechnicianDetails {
     private SimpleStringProperty name;
     private SimpleStringProperty email;
     private SimpleStringProperty skills;
