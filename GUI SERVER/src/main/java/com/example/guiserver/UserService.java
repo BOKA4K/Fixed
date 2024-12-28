@@ -163,12 +163,12 @@ public class UserService {
         return false;
     }
 
-    public void updateUserStatus(String name, String status) {
-        String sql = "UPDATE users SET status = ? WHERE name = ?";
+    public void updateUserStatus(int Userid, String status) {
+        String sql = "UPDATE users SET status = ? WHERE user_id = ?";
         try {
             PreparedStatement statement = Server.conn.prepareStatement(sql);
             statement.setString(1, status);
-            statement.setString(2, name);
+            statement.setInt(2, Userid);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -218,6 +218,72 @@ public class UserService {
             return false; // Return false if an error occurs
         }
     }
+    public boolean ChangeAppointmentStatus(int appointmentId,String status) {
+        String query = "UPDATE appointments SET status = ? WHERE appointment_id = ?";
+
+        try (PreparedStatement statement = Server.conn.prepareStatement(query)) {
+            // Set the appointmentId parameter
+            statement.setString(1, status);
+
+            statement.setInt(2, appointmentId);
+
+            // Execute the update query
+            int rowsAffected = statement.executeUpdate();
+
+            // If rowsAffected > 0, the appointment was updated successfully
+            if (rowsAffected > 0) {
+                System.out.println("Appointment with ID " + appointmentId + " has been cancelled.");
+                return true;
+            } else {
+                System.out.println("No appointment found with ID " + appointmentId);
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if an error occurs
+        }
+    }
+    public boolean addPayment(int appointmentId, double amount) {
+        try {
+            // Step 1: Fetch the corresponding service_request_id using appointment_id
+            String serviceRequestQuery = "SELECT service_request_id FROM appointments WHERE appointment_id = ?";
+            PreparedStatement serviceRequestStmt = Server.conn.prepareStatement(serviceRequestQuery);
+            serviceRequestStmt.setInt(1, appointmentId);
+            ResultSet resultSet = serviceRequestStmt.executeQuery();
+
+            if (!resultSet.next()) {
+                System.out.println("No service request found for the given appointment ID.");
+                resultSet.close();
+                serviceRequestStmt.close();
+                return false; // Appointment ID is invalid
+            }
+
+            int serviceRequestId = resultSet.getInt("service_request_id");
+            resultSet.close();
+            serviceRequestStmt.close();
+
+            // Step 2: Insert the payment record into the payments table
+            String paymentQuery = "INSERT INTO payments (service_request_id, amount, payment_method, payment_status) VALUES (?, ?, 'credit_card', 'pending')";
+            PreparedStatement paymentStmt = Server.conn.prepareStatement(paymentQuery);
+            paymentStmt.setInt(1, serviceRequestId);
+            paymentStmt.setDouble(2, amount);
+
+            int rowsAffected = paymentStmt.executeUpdate();
+            paymentStmt.close();
+
+            // Step 3: Return true if the payment was successfully recorded
+            if (rowsAffected > 0) {
+                System.out.println("Payment successfully added for service request ID: " + serviceRequestId);
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("An error occurred while adding the payment.");
+            e.printStackTrace();
+        }
+
+        return false; // Return false if the operation failed
+    }
 
     public String getUsernameByUserId(int userId) {
         String username = null; // Default to null if user not found
@@ -240,35 +306,25 @@ public class UserService {
         return username;
     }
 
-    public List<AppointmentDetails> getAppointmentsByCredentials(int UserId) {
+    public List<AppointmentDetails> getAppointmentsByCredentials(int userId,String UserType) {
         List<AppointmentDetails> appointments = new ArrayList<>();
 
         try {
-            // Step 1: Validate user credentials
-            String query = "SELECT user_id FROM users WHERE user_id = ?";
-            PreparedStatement statement = Server.conn.prepareStatement(query);
-            statement.setString(1, String.valueOf(UserId));
-
-            ResultSet resultSet = statement.executeQuery();
-
-            if (!resultSet.next()) {
-                System.out.println("Invalid credentials");
-                resultSet.close();
-                statement.close();
-                return appointments;  // Empty list if user is invalid
-            }
-
-            int userId = resultSet.getInt("user_id");
-            resultSet.close();
-            statement.close();
 
             // Step 2: Fetch appointments for this user
             String appointmentQuery = "SELECT a.appointment_id, a.scheduled_time, a.status, s.problem_description " +
                     "FROM appointments a " +
-                    "JOIN service_requests s ON a.service_request_id = s.request_id " +
-                    "WHERE s.user_id = ?";
+                    "JOIN service_requests s ON a.service_request_id = s.request_id ";
+            if (UserType.equals("technician")){
+                appointmentQuery +=
+                        "WHERE s.technician_id = ?";
+            }else {
+                appointmentQuery+= "WHERE s.user_id = ?";
+            }
             PreparedStatement appointmentStatement = Server.conn.prepareStatement(appointmentQuery);
+
             appointmentStatement.setInt(1, userId);
+            System.out.println(appointmentQuery);
             ResultSet appointmentResultSet = appointmentStatement.executeQuery();
 
             // Step 3: Process the results and populate the appointments list

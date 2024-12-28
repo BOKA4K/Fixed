@@ -38,9 +38,9 @@ public class LoginController {
         stage.setScene(new Scene(root));
         stage.show();
     }
-    void go_to_Dashboard(ActionEvent event) throws IOException {
+    void go_to_Dashboard(ActionEvent event,String UserType) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
-        loader.setControllerFactory(param -> new DashboardController(serverConnection));
+        loader.setControllerFactory(param -> new DashboardController(serverConnection,UserType));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -56,7 +56,8 @@ public class LoginController {
         String result = serverConnection.receiveMessage();
         if ("Login successful".equals(result)) {
             System.out.println("Login done");
-            go_to_Dashboard(event);
+            serverConnection.sendMessage("get_UserType");
+            go_to_Dashboard(event,serverConnection.receiveMessage());
 
 
         } else if (name.isEmpty() && pass.isEmpty()) {

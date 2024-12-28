@@ -24,9 +24,10 @@ public class ClientHandler extends Thread {
         LoginResult res=userService.checkCredentialsExist(name, password);
         if (res.isCredentialsExist()) {
             writer.println("Login successful");
-            userService.updateUserStatus(name, "online");
             String UserType= res.UserType();
             int UserId= res.getUserId();
+            userService.updateUserStatus(UserId, "online");
+
             // Transition to LoggedInClientHandler without closing the socket
             System.out.println(name+"loged in ");
 
@@ -74,7 +75,6 @@ public class ClientHandler extends Thread {
 
     private void close() {
         try {
-            userService.updateUserStatus(name, "offline");
             writer.close();
             reader.close();
             running = false;

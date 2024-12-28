@@ -40,7 +40,7 @@ public class AI_assisted {
         String escapedPrompt = promptMessage.replace("\"", "\\\"").replace("\n", "\\n");
         System.out.println(escapedPrompt);
         return "{\n" +
-                "  \"model\": \"llama3.1\",\n" +
+                "  \"model\": \"llama3.2:1b\",\n" +
                 "  \"messages\": [\n" +
                 "    {\"role\": \"user\", \"content\": \"" + escapedPrompt + "\"}\n" +
                 "  ]\n" +

@@ -1,5 +1,7 @@
 package com.example.guiserver;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -112,11 +115,18 @@ public class ServerHome implements Initializable {
         offlinestatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         awayName.setCellValueFactory(new PropertyValueFactory<>("name"));
         awaystatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeColumns(); // Initialize the table columns
         loadUserData(); // Load initial data
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.3), e -> loadUserData())
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE); // Loop indefinitely
+        timeline.play(); // Start the Timeline
     }
 }

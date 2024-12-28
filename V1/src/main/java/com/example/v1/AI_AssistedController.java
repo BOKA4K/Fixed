@@ -14,8 +14,11 @@ import java.io.IOException;
 
 public class AI_AssistedController {
     private final ServerConnection serverConnection;
-    public AI_AssistedController(ServerConnection serverConnection) {
+    private final String UserType;
+
+    public AI_AssistedController(ServerConnection serverConnection,String UserType) {
         this.serverConnection = serverConnection;
+        this.UserType=UserType;
     }
 
     @FXML
@@ -40,7 +43,7 @@ public class AI_AssistedController {
     @FXML
     void go_to_Service_Request(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Service Request.fxml"));
-        loader.setControllerFactory(param -> new Service_RequestController(serverConnection));
+        loader.setControllerFactory(param -> new Service_RequestController(serverConnection,UserType));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));

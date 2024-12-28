@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 
 public class TechnicianBookingController implements Initializable {
     private final ServerConnection serverConnection;
+    private final String UserType;
 
     @FXML
     private Label error;
@@ -54,8 +55,9 @@ public class TechnicianBookingController implements Initializable {
 
     private ObservableList<TechnicianDetails> technicianObservableList;
 
-    public TechnicianBookingController(ServerConnection serverConnection) {
+    public TechnicianBookingController(ServerConnection serverConnection,String UserType) {
         this.serverConnection = serverConnection;
+        this.UserType=UserType;
     }
     @FXML
     private TextField problem_description;
@@ -86,7 +88,7 @@ public class TechnicianBookingController implements Initializable {
     @FXML
     void go_to_Service_Request(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Service Request.fxml"));
-        loader.setControllerFactory(param -> new Service_RequestController(serverConnection));
+        loader.setControllerFactory(param -> new Service_RequestController(serverConnection,UserType));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));

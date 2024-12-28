@@ -6,22 +6,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.Service_overviewController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.v1.PaymentController">
    <children>
       <VBox alignment="CENTER" prefHeight="400.0" prefWidth="541.0" spacing="70.0" stylesheets="@style.css">
          <children>
-            <Button mnemonicParsing="false" onAction="#Cancel_appointment" text="Cancel" />
+            <Button mnemonicParsing="false" onAction="#Pay" text="Cancel" />
             <Button mnemonicParsing="false" onAction="#go_to_dashboard" text="Go Back" />
          </children>
       </VBox>
       <HBox prefHeight="400.0" prefWidth="54.0" stylesheets="@style.css" />
       <TableView fx:id="appointmentTable" prefHeight="400.0" prefWidth="1006.0">
-        <columns>
-          <TableColumn fx:id="Appointment" prefWidth="97.60003817081451" text="Appointment" />
+         <columns>
+            <TableColumn fx:id="Appointment" prefWidth="97.60003817081451" text="Appointment" />
             <TableColumn fx:id="Appointment_Description" prefWidth="197.5999755859375" text="Appointment Description" />
-          <TableColumn fx:id="Appointment_Status" prefWidth="194.39999389648438" text="Status" />
+            <TableColumn fx:id="Appointment_Status" prefWidth="194.39999389648438" text="Status" />
             <TableColumn fx:id="scheduledTime" prefWidth="128.800048828125" text="scheduledTime" />
-        </columns>
+         </columns>
       </TableView>
    </children>
 </HBox>

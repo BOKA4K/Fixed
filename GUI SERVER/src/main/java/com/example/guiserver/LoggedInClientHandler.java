@@ -60,6 +60,9 @@ public class LoggedInClientHandler extends Thread {
 
 
     }
+    private void get_UserType(){
+        writer.println(UserType);
+    }
     private void Cancel_appointment() throws IOException {
         String appointmentId = reader.readLine();
         if (userService.cancelAppointment(Integer.parseInt(appointmentId))){
@@ -68,8 +71,24 @@ public class LoggedInClientHandler extends Thread {
         }
 
     }
+    private void Update_appointment_status() throws IOException {
+        String AppointmentID=reader.readLine();
+        String AppointmentStatus=reader.readLine();
+        if (userService.ChangeAppointmentStatus(Integer.parseInt(AppointmentID),AppointmentStatus)){
+            writer.println("status updated");
+        }
+
+    }
+    private void addPayment() throws IOException {
+        String appointmentId=reader.readLine();
+        String Payment_amount=reader.readLine();
+        if (userService.addPayment(Integer.parseInt(appointmentId), Double.parseDouble(Payment_amount))){
+            writer.println("payment added");
+        }
+
+    }
         private void Service_overview(){
-            writer.println(jsonConverter.getAppointmentsAsJson(UserId));
+            writer.println(jsonConverter.getAppointmentsAsJson(UserId,UserType));
         }
         public void run() {
         try {
@@ -83,7 +102,11 @@ public class LoggedInClientHandler extends Thread {
                     case "TechnicianDetails" -> TechnicianDetails();
                     case "BookAppointment" -> Book_Appointment();
                     case "Cancel_appointment" -> Cancel_appointment();
+                    case "addPayment" -> addPayment();
 
+                    case "Update_appointment_status" -> Update_appointment_status();
+
+                    case "get_UserType" -> get_UserType();
                     case "Service_overview" -> Service_overview();
                     default -> System.out.println("Server: Invalid command");
                 }            }
@@ -98,6 +121,7 @@ public class LoggedInClientHandler extends Thread {
 
     private void close() {
         try {
+            userService.updateUserStatus(UserId,"offline");
             writer.close();
             reader.close();
             clientSocket.close();
