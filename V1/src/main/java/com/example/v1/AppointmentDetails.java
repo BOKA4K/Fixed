@@ -33,4 +33,36 @@ public class AppointmentDetails {
     public StringProperty problemDescriptionProperty() {
         return problemDescription;
     }
+
+    public int getAppointmentId() {
+        return appointmentId.get();
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId.set(appointmentId);
+    }
+
+    public String getScheduledTime() {
+        return scheduledTime.get();
+    }
+
+    public void setScheduledTime(String scheduledTime) {
+        this.scheduledTime.set(scheduledTime);
+    }
+
+    public String getStatus() {
+        return status.get();
+    }
+
+    public void setStatus(String status) {
+        this.status.set(status);
+    }
+
+    public String getProblemDescription() {
+        return problemDescription.get();
+    }
+
+    public void setProblemDescription(String problemDescription) {
+        this.problemDescription.set(problemDescription);
+    }
 }

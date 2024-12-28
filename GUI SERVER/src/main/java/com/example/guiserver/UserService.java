@@ -9,30 +9,43 @@ import java.util.HashMap;
 import java.util.List;
 
 public class UserService {
-    public boolean checkCredentialsExist(String username, String password) {
+    public LoginResult checkCredentialsExist(String username, String password) {
         try {
-            String query = "SELECT * FROM users WHERE name = ? AND password = ?";
+            String query = "SELECT user_id, role FROM users WHERE name = ? AND password = ?";
             PreparedStatement statement = Server.conn.prepareStatement(query);
             statement.setString(1, username);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
-            boolean credentialsExist = resultSet.next();
+
+            if (resultSet.next()) {
+                int userId = resultSet.getInt("user_id"); // Retrieve user_id
+                String role = resultSet.getString("role"); // Retrieve role
+                System.out.println("User ID: " + userId);
+                System.out.println("Role: " + role);
+
+                // Save userId and role to variables or a class-level object for further use
+
+
+                resultSet.close();
+                statement.close();
+                return new LoginResult(true,role,userId); // Credentials exist
+            }
             resultSet.close();
             statement.close();
-            return credentialsExist;
         } catch (SQLException e) {
             System.err.println("Failed to connect to the database!");
             e.printStackTrace();
         }
-        return false;
+        // Credentials do not exist
+        return new LoginResult(false,null,0);
     }
-    public boolean bookAppointment(String username, String password, String technicianEmail, String appointmentDate,String problem_description) {
+
+    public boolean bookAppointment(int UserId, String technicianEmail, String appointmentDate,String problem_description) {
         try {
             // Step 1: Check if the user's credentials are valid
-            String query = "SELECT user_id FROM users WHERE name = ? AND password = ?";
+            String query = "SELECT user_id FROM users WHERE user_id = ?";
             PreparedStatement statement = Server.conn.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, password);
+            statement.setString(1, String.valueOf(UserId));
             ResultSet resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
@@ -182,15 +195,60 @@ public class UserService {
 
         return techniciansSkills;
     }
-    public List<AppointmentDetails> getAppointmentsByCredentials(String username, String password) {
+    public boolean cancelAppointment(int appointmentId) {
+        String query = "UPDATE appointments SET status = 'cancelled' WHERE appointment_id = ?";
+
+        try (PreparedStatement statement = Server.conn.prepareStatement(query)) {
+            // Set the appointmentId parameter
+            statement.setInt(1, appointmentId);
+
+            // Execute the update query
+            int rowsAffected = statement.executeUpdate();
+
+            // If rowsAffected > 0, the appointment was updated successfully
+            if (rowsAffected > 0) {
+                System.out.println("Appointment with ID " + appointmentId + " has been cancelled.");
+                return true;
+            } else {
+                System.out.println("No appointment found with ID " + appointmentId);
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if an error occurs
+        }
+    }
+
+    public String getUsernameByUserId(int userId) {
+        String username = null; // Default to null if user not found
+        try {
+            String query = "SELECT name FROM users WHERE user_id = ?";
+            PreparedStatement statement = Server.conn.prepareStatement(query);
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                username = resultSet.getString("name");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.err.println("Failed to fetch username from the database!");
+            e.printStackTrace();
+        }
+        return username;
+    }
+
+    public List<AppointmentDetails> getAppointmentsByCredentials(int UserId) {
         List<AppointmentDetails> appointments = new ArrayList<>();
 
         try {
             // Step 1: Validate user credentials
-            String query = "SELECT user_id FROM users WHERE name = ? AND password = ?";
+            String query = "SELECT user_id FROM users WHERE user_id = ?";
             PreparedStatement statement = Server.conn.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, password);
+            statement.setString(1, String.valueOf(UserId));
+
             ResultSet resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {

@@ -27,8 +27,8 @@ public class JsonConverter {
 
         return jsonArray.toString();
     }
-    public JSONArray getAppointmentsAsJson(String name, String password) {
-        List<AppointmentDetails> appointments = userService.getAppointmentsByCredentials(name, password);
+    public JSONArray getAppointmentsAsJson(int UserId) {
+        List<AppointmentDetails> appointments = userService.getAppointmentsByCredentials(UserId);
         JSONArray appointmentsJsonArray = new JSONArray();
 
         for (AppointmentDetails appointment : appointments) {

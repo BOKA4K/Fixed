@@ -10,19 +10,18 @@ import java.net.Socket;
 import java.util.List;
 
 public class LoggedInClientHandler extends Thread {
-    private String name;
-    private String password;
     private JsonConverter jsonConverter;
-
+    private String UserType;
+    private int UserId;
     private Socket clientSocket;
     private BufferedReader reader;
     private PrintWriter writer;
     private UserService userService;
     private   AI_assisted aiAssisted;
-    public LoggedInClientHandler(Socket socket, String name,String password, BufferedReader reader, PrintWriter writer, UserService userService) {
+    public LoggedInClientHandler(Socket socket, String UserType,int UserId, BufferedReader reader, PrintWriter writer, UserService userService) {
         this.clientSocket = socket;
-        this.name = name;
-        this.password=password;
+        this.UserType = UserType;
+        this.UserId=UserId;
         this.reader = reader;
         this.writer = writer;
         this.userService = userService;
@@ -51,7 +50,7 @@ public class LoggedInClientHandler extends Thread {
         String date = reader.readLine();
         String problem_description = reader.readLine();
         if (email != null && !email.isEmpty() && date != null && !date.isEmpty()) {
-            boolean booking_status=userService.bookAppointment(name, password, email, date,problem_description);
+            boolean booking_status=userService.bookAppointment(UserId, email, date,problem_description);
             if (booking_status){
                 writer.println("booking done");
             }
@@ -61,22 +60,31 @@ public class LoggedInClientHandler extends Thread {
 
 
     }
+    private void Cancel_appointment() throws IOException {
+        String appointmentId = reader.readLine();
+        if (userService.cancelAppointment(Integer.parseInt(appointmentId))){
+            System.out.println("appointment Canceled");
+            writer.println("appointment Canceled");
+        }
+
+    }
         private void Service_overview(){
-            writer.println(jsonConverter.getAppointmentsAsJson(name,password));
+            writer.println(jsonConverter.getAppointmentsAsJson(UserId));
         }
         public void run() {
         try {
             jsonConverter=new JsonConverter(userService);
+
             String message;
             while ((message = reader.readLine()) != null) {
-                System.out.println("Message from " + name + ": " + message);
+                System.out.println("Message from " + userService.getUsernameByUserId(UserId) + ": " + message);
                 switch (message) {
                     case "Ai-assisted" -> get_Ai_Recommendation();
                     case "TechnicianDetails" -> TechnicianDetails();
                     case "BookAppointment" -> Book_Appointment();
+                    case "Cancel_appointment" -> Cancel_appointment();
 
                     case "Service_overview" -> Service_overview();
-
                     default -> System.out.println("Server: Invalid command");
                 }            }
         } catch (IOException e) {

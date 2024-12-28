@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class ClientHandler extends Thread {
     private String name;
-    private String status;
     private Socket clientSocket;
     private boolean running;
     private BufferedReader reader;
@@ -22,16 +21,16 @@ public class ClientHandler extends Thread {
     public void login() throws IOException, SQLException {
         String name = reader.readLine();
         String password = reader.readLine();
-        if (userService.checkCredentialsExist(name, password)) {
+        LoginResult res=userService.checkCredentialsExist(name, password);
+        if (res.isCredentialsExist()) {
             writer.println("Login successful");
-            this.name = name;
-            this.status = "online";
             userService.updateUserStatus(name, "online");
-
+            String UserType= res.UserType();
+            int UserId= res.getUserId();
             // Transition to LoggedInClientHandler without closing the socket
             System.out.println(name+"loged in ");
 
-            transitionToLoggedInClientHandler(name,password);
+            transitionToLoggedInClientHandler(UserType,UserId);
         } else {
             writer.println("Server: Invalid credentials");
         }
@@ -85,10 +84,10 @@ public class ClientHandler extends Thread {
         }
     }
 
-    private void transitionToLoggedInClientHandler(String name,String password) {
+    private void transitionToLoggedInClientHandler(String UserType,int UserId) {
         try {
             // Instead of closing the socket, pass it to the LoggedInClientHandler
-            LoggedInClientHandler loggedInClientHandler = new LoggedInClientHandler(clientSocket, name,password, reader, writer, userService);
+            LoggedInClientHandler loggedInClientHandler = new LoggedInClientHandler(clientSocket, UserType,UserId, reader, writer, userService);
             running = false;
 
             loggedInClientHandler.start(); // Start the LoggedInClientHandler thread

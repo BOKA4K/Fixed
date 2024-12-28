@@ -1,5 +1,6 @@
 package com.example.v1;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,9 +66,17 @@ public class Service_overviewController implements Initializable {
     }
 
     @FXML
-    void Cancel_appointment(ActionEvent event) {
-        // Handle the cancel appointment functionality
+    void Cancel_appointment(ActionEvent event) throws IOException {
+        AppointmentDetails selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+        serverConnection.sendMessage("Cancel_appointment");
+        serverConnection.sendMessage(String.valueOf(selectedAppointment.getAppointmentId()));
+        String result = serverConnection.receiveMessage();
+        if (("appointment Canceled".equals(result))){
+            System.out.println("appointment Canceled");
+            selectedAppointment.setStatus("canceled");
+        }
     }
+
 
     @FXML
     void go_to_dashboard(ActionEvent event) throws IOException {
@@ -97,7 +106,10 @@ public class Service_overviewController implements Initializable {
             appointmentTable.setItems(appointmentsObservableList);
 
             // Set up the columns to display the data
-            Appointment.setCellValueFactory(cellData -> cellData.getValue().appointmentIdProperty().asObject());
+            Appointment.setCellValueFactory(cellData -> {
+                // Auto-number the rows by returning the row index
+                return new SimpleObjectProperty<>(appointmentTable.getItems().indexOf(cellData.getValue()) + 1);
+            });
             Appointment_Description.setCellValueFactory(cellData -> cellData.getValue().problemDescriptionProperty());
             Appointment_Status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
             scheduledTime.setCellValueFactory(cellData -> cellData.getValue().scheduledTimeProperty());
