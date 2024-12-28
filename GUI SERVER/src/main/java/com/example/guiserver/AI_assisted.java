@@ -54,11 +54,6 @@ public class AI_assisted {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             // Set up the connection
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-
             // Write the input JSON string to the request body
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
